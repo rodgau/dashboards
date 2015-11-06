@@ -40,8 +40,8 @@
           <div class="chart-title">
             Readings per Hour
           </div>
-          <div class="chart-stage" id="chart-00b">
-              //<img data-src="holder.js/100%x120/white">
+          <div class="chart-stage">
+              <img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
             (60 minute rolling average)
@@ -181,11 +181,11 @@
 			var interval = "minutely"
 			var timeframe = "this_60_minutes"
 		
-			var readingsHr = new Keen.Query("count", {
-				eventCollection: "Test 2",
-				timeframe: "this_60_minutes",
-				timezone: "UTC"
-			});			
+//			var readingsHr = new Keen.Query("count", {
+//				eventCollection: "Test 2",
+//				timeframe: "this_60_minutes",
+//				timezone: "UTC"
+//			});			
 			var remoteCurrent = new Keen.Query("average", {
 				eventCollection: "Test 2",
 				targetProperty: "RemoteSensor1.temp",
@@ -213,9 +213,9 @@
 				timezone: "UTC"
 			});
 			
-			var chart0b = new Keen.Dataviz()
-				.el(document.getElementById("chart-00b"))
-				.chartType("metric");								
+//			var chart0b = new Keen.Dataviz()
+//				.el(document.getElementById("chart-00b"))
+//				.chartType("metric");								
 			var chart0 = new Keen.Dataviz()
 				.el(document.getElementById("chart-00"))
 				.chartType("linechart");
@@ -250,10 +250,10 @@
 						fontSize: 20
 				}
 		});
-		chart0b.attributes({
-				title: "readings/hr",
-				colors: ['blue']
-		});
+//		chart0b.attributes({
+//				title: "readings/hr",
+//			colors: ['blue']
+//		});
 		chart1b.attributes({
 				title: "Remote °C",
 				colors: ['red']
@@ -300,14 +300,14 @@
 		});
 
 		// start spinners
-		chart0b.prepare();
+//		chart0b.prepare();
 		chart0.prepare();
 		chart1.prepare();
 		chart1b.prepare();
 		chart2.prepare();
 		chart2b.prepare();
 
-		var req0b = client.run(readingsHr, function(err, res){
+/* 		var req0b = client.run(readingsHr, function(err, res){
 			if (err) {
 				// Display the API error
 				chart0b.error(err.message);
@@ -319,7 +319,7 @@
 					.render();
 			}
 		});
-		var req1 = client.run(remote, function(err, res){
+ */		var req1 = client.run(remote, function(err, res){
 			if (err) {
 				// Display the API error
 				chart1.error(err.message);
@@ -368,7 +368,7 @@
 			}
 		});
 		// handle our combined line graph a bit differently
-		var req0 = client.run([remote, board, function(err, res){ // run the 2 queries
+		var req0 = client.run([remote, board], function(err, res){ // run the 2 queries
 			if (err) {
 				// Display the API error
 				chart0.error(err.message);
@@ -402,7 +402,7 @@
 
 		// Re-run and refresh every half minute...
 		setInterval(function() {			
-			req0b.refresh();
+//			req0b.refresh();
 			req0.refresh();
 			req1.refresh();
 			req1b.refresh();
