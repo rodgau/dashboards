@@ -181,7 +181,7 @@
 			var remoteCurrent = new Keen.Query("average", {
 				eventCollection: "Test 2",
 				targetProperty: "RemoteSensor1.temp",
-				timeframe: "this_60_minutes",
+				timeframe: "this_1_minutes",
 				timezone: "UTC"
 			});			
 			var boardCurrent = new Keen.Query("average", {
