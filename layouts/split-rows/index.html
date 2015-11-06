@@ -67,7 +67,7 @@
       <div class="col-sm-3">
         <div class="chart-wrapper">
           <div class="chart-title">
-            Cell Title gppber
+            Cell Title goober
           </div>
           <div class="chart-stage" id="chart-02b">
               //<img data-src="holder.js/100%x120/white">
@@ -210,8 +210,8 @@
 				.chartType("linechart");
 			var chart1b = new Keen.Dataviz()
 				.el(document.getElementById("chart-02b"))
-				.chartType("metric")
-				.prepare();
+				.chartType("metric");
+//				.prepare();
 			var chart2 = new Keen.Dataviz()
 				.el(document.getElementById("chart-03"))
 				.chartType("linechart");
@@ -271,7 +271,7 @@
 		
 		// start spinners
 		chart1.prepare();
-		//chart1b.prepare();
+		chart1b.prepare();
 		chart2.prepare();
 
 		var req1 = client.run(remote, function(err, res){
@@ -314,7 +314,7 @@
 		// Re-run and refresh every half minute...
 		setInterval(function() {
 			req1.refresh();
-			//req1b.refresh();
+			req1b.refresh();
 			req2.refresh();
 		}, 1000 * 60 * 0.5);
 		
