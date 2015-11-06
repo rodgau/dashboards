@@ -40,8 +40,8 @@
           <div class="chart-title">
             Cell Title
           </div>
-          <div class="chart-stage" id="chart-01">
-              //<img data-src="holder.js/100%x120/white">
+          <div class="chart-stage">
+              <img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
             Notes about this chart
@@ -168,77 +168,5 @@
   <script type="text/javascript" src="../../assets/lib/keen-js/dist/keen.min.js"></script>
   <script type="text/javascript" src="../../assets/js/meta.js"></script>
 
-	<script type="text/javascript">
-
-		var client = new Keen({
-			projectId: "53e30cc333e4061149000003",
-			readKey: "86e4bf9a678cace2f791e78efdb7b0e075c769fa26c67f6768a71111a972fc154c784e8a92871722bc8e020f29333a6e7758dda21884dfb146d230481a6e243842056e5c966611cb6f95bb6f290d298f65ccefb032dae704557b35ee42c9767dfb8064ec104321d56ef2c6205a915fa0"
-			
-		});
-
-		Keen.ready(function(){
-			
-			var query = new Keen.Query("average", {
-				eventCollection: "Test 2",
-				interval: "minutely",
-				targetProperty: "RemoteSensor1.temp",
-				timeframe: "this_60_minutes",
-				timezone: "UTC"
-			});
-			
-			var chart = new Keen.Dataviz()
-				.el(document.getElementById("chart-01"))
-				.chartType("linechart");
-				
-		//chart.attributes used for keen's chart settings (over-rides Google API)
-		chart.attributes({
-				title: "Remote Sensor (30 second auto-refresh)",
-				width: 900,
-				height: 450,
-				titlePosition: 'out',
-				titleTextStyle: {
-						color: 'black',
-						fontSize: 20
-				}
-		});
-		//chart.chartOptions passes args directly to Google Charts API (or C3/Charts.js)
-		chart.chartOptions({
-				vAxis: {
-						minValue: 20,
-			maxValue: 45,
-						minorGridlines: {
-								count: 5
-						}
-				},
-				explorer: {
-						actions: ['dragToZoom', 'rightClickToReset'] 
-				}
-		});
-
-	chart.prepare(); // start spinner
-
-		var req = client.run(query, function(err, res){
-			if (err) {
-				// Display the API error
-				chart.error(err.message);
-			}
-			else {
-				// Handle the response
-				chart
-					.parseRequest(this)
-					.title("Remote Sensor Temps (drag area to zoom-in, Right-click resets)")
-					.render();
-			}
-		});
-
-		// Re-run and refresh every half minute...
-		setInterval(function() {
-			req.refresh();
-		}, 1000 * 60 * 0.5);
-		
-	});
-
-	</script>
-	
 </body>
 </html>
