@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Layouts &raquo; Split-Rows</title>
+  <title>Dashboard &raquo; Main Sensors</title>
   <link rel="stylesheet" type="text/css" href="../../assets/lib/bootstrap/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="../../assets/css/keen-dashboards.css" />
 </head>
@@ -69,8 +69,8 @@
           <div class="chart-title">
             Cell Title
           </div>
-          <div class="chart-stage">
-              <img data-src="holder.js/100%x120/white">
+          <div class="chart-stage" id="chart-02b">
+              //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
             Notes about this chart
@@ -178,6 +178,18 @@
 
 		Keen.ready(function(){
 			
+			var remoteCurrent = new Keen.Query("average", {
+				eventCollection: "Test 2",
+				targetProperty: "RemoteSensor1.temp",
+				timeframe: "this_1_minutes",
+				timezone: "UTC"
+			});			
+			var boardCurrent = new Keen.Query("average", {
+				eventCollection: "Test 2",
+				targetProperty: "BoardSensor1.temp",
+				timeframe: "this_1_minutes",
+				timezone: "UTC"
+			});			
 			var remote = new Keen.Query("average", {
 				eventCollection: "Test 2",
 				interval: "minutely",
@@ -196,6 +208,11 @@
 			var chart1 = new Keen.Dataviz()
 				.el(document.getElementById("chart-02"))
 				.chartType("linechart");
+			var chart1b = new Keen.Dataviz()
+				.el(document.getElementById("chart-02b"))
+				.chartType("metric")
+				.title("Remote °C")
+				.colors: ["#49c5b1"];
 			var chart2 = new Keen.Dataviz()
 				.el(document.getElementById("chart-03"))
 				.chartType("linechart");
@@ -248,8 +265,10 @@
 				}
 		});
 
-		chart1.prepare(); // start spinner
-		chart2.prepare(); // start spinner
+		// start spinners
+		chart1.prepare();
+		chart1b.prepare();
+		chart2.prepare();
 
 		var req1 = client.run(remote, function(err, res){
 			if (err) {
@@ -259,6 +278,18 @@
 			else {
 				// Handle the response
 				chart1
+					.parseRequest(this)
+					.render();
+			}
+		});
+		var req1b = client.run(remoteCurrent, function(err, res){
+			if (err) {
+				// Display the API error
+				chart1b.error(err.message);
+			}
+			else {
+				// Handle the response
+				chart1b
 					.parseRequest(this)
 					.render();
 			}
@@ -279,6 +310,7 @@
 		// Re-run and refresh every half minute...
 		setInterval(function() {
 			req1.refresh();
+			req1b.refresh();
 			req2.refresh();
 		}, 1000 * 60 * 0.5);
 		
