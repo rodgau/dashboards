@@ -53,11 +53,40 @@
           <div class="chart-title">
             Cell Title
           </div>
-          <div class="chart-stage" id="chart-01">
+          <div class="chart-stage">
+              <img data-src="holder.js/100%x120/white">
+          </div>
+          <div class="chart-notes">
+            Notes about this chart
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            Cell Title
+          </div>
+          <div class="chart-stage">
+              <img data-src="holder.js/100%x120/white">
+          </div>
+          <div class="chart-notes">
+            Notes about this chart
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-9">
+        <div class="chart-wrapper">
+          <div class="chart-title">
+            (drag area to zoom-in, right-click to reset)
+          </div>
+          <div class="chart-stage" id="chart-02">
               //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
-            Notes about this chart
+            Auto-refreshes every 30 seconds.
           </div>
         </div>
       </div>
@@ -80,42 +109,13 @@
       <div class="col-sm-9">
         <div class="chart-wrapper">
           <div class="chart-title">
-            Cell Title
+            (drag area to zoom-in, right-click to reset)
           </div>
-          <div class="chart-stage">
-              <img data-src="holder.js/100%x120/white">
-          </div>
-          <div class="chart-notes">
-            Notes about this chart
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm-3">
-        <div class="chart-wrapper">
-          <div class="chart-title">
-            Cell Title
-          </div>
-          <div class="chart-stage">
-              <img data-src="holder.js/100%x120/white">
+          <div class="chart-stage" id="chart-03">
+              //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
-            Notes about this chart
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-9">
-        <div class="chart-wrapper">
-          <div class="chart-title">
-            Cell Title
-          </div>
-          <div class="chart-stage">
-              <img data-src="holder.js/100%x120/white">
-          </div>
-          <div class="chart-notes">
-            Notes about this chart
+            Auto-refreshes every 30 seconds.
           </div>
         </div>
       </div>
@@ -178,23 +178,33 @@
 
 		Keen.ready(function(){
 			
-			var query = new Keen.Query("average", {
+			var remote = new Keen.Query("average", {
 				eventCollection: "Test 2",
 				interval: "minutely",
 				targetProperty: "RemoteSensor1.temp",
 				timeframe: "this_60_minutes",
 				timezone: "UTC"
 			});
+			var board = new Keen.Query("average", {
+				eventCollection: "Test 2",
+				interval: "minutely",
+				targetProperty: "BoardSensor1.temp",
+				timeframe: "this_60_minutes",
+				timezone: "UTC"
+			});
 			
-			var chart = new Keen.Dataviz()
-				.el(document.getElementById("chart-01"))
+			var chart1 = new Keen.Dataviz()
+				.el(document.getElementById("chart-02"))
+				.chartType("linechart");
+			var chart2 = new Keen.Dataviz()
+				.el(document.getElementById("chart-03"))
 				.chartType("linechart");
 				
 		//chart.attributes used for keen's chart settings (over-rides Google API)
-		chart.attributes({
-				title: "Remote Sensor (30 second auto-refresh)",
-				width: 900,
-				height: 450,
+		chart1.attributes({
+				title: "Remote Sensor Temperature, °C",
+				//width: 900,
+				//height: 450,
 				titlePosition: 'out',
 				titleTextStyle: {
 						color: 'black',
@@ -202,7 +212,30 @@
 				}
 		});
 		//chart.chartOptions passes args directly to Google Charts API (or C3/Charts.js)
-		chart.chartOptions({
+		chart1.chartOptions({
+				vAxis: {
+						minValue: 20,
+			maxValue: 45,
+						minorGridlines: {
+								count: 5
+						}
+				},
+				explorer: {
+						actions: ['dragToZoom', 'rightClickToReset'] 
+				}
+		});
+		chart2.attributes({
+				title: "Board Sensor Temperature, °C",
+				//width: 900,
+				//height: 450,
+				titlePosition: 'out',
+				titleTextStyle: {
+						color: 'black',
+						fontSize: 20
+				}
+		});
+		//chart.chartOptions passes args directly to Google Charts API (or C3/Charts.js)
+		chart2.chartOptions({
 				vAxis: {
 						minValue: 20,
 			maxValue: 45,
@@ -215,25 +248,38 @@
 				}
 		});
 
-	chart.prepare(); // start spinner
+		chart1.prepare(); // start spinner
+		chart2.prepare(); // start spinner
 
-		var req = client.run(query, function(err, res){
+		var req1 = client.run(remote, function(err, res){
 			if (err) {
 				// Display the API error
-				chart.error(err.message);
+				chart1.error(err.message);
 			}
 			else {
 				// Handle the response
-				chart
+				chart1
 					.parseRequest(this)
-					.title("Remote Sensor Temps (drag area to zoom-in, Right-click resets)")
+					.render();
+			}
+		});
+		var req2 = client.run(board, function(err, res){
+			if (err) {
+				// Display the API error
+				chart2.error(err.message);
+			}
+			else {
+				// Handle the response
+				chart2
+					.parseRequest(this)
 					.render();
 			}
 		});
 
 		// Re-run and refresh every half minute...
 		setInterval(function() {
-			req.refresh();
+			req1.refresh();
+			req2.refresh();
 		}, 1000 * 60 * 0.5);
 		
 	});
