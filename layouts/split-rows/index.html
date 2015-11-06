@@ -67,7 +67,7 @@
       <div class="col-sm-3">
         <div class="chart-wrapper">
           <div class="chart-title">
-            Cell Title goober
+            Cell Titleishishnous
           </div>
           <div class="chart-stage" id="chart-02b">
               //<img data-src="holder.js/100%x120/white">
@@ -181,7 +181,7 @@
 			var remoteCurrent = new Keen.Query("average", {
 				eventCollection: "Test 2",
 				targetProperty: "RemoteSensor1.temp",
-				timeframe: "this_1_minutes",
+				timeframe: "this_5_minutes",
 				timezone: "UTC"
 			});			
 			var boardCurrent = new Keen.Query("average", {
@@ -211,7 +211,6 @@
 			var chart1b = new Keen.Dataviz()
 				.el(document.getElementById("chart-02b"))
 				.chartType("metric");
-//				.prepare();
 			var chart2 = new Keen.Dataviz()
 				.el(document.getElementById("chart-03"))
 				.chartType("linechart");
@@ -226,6 +225,10 @@
 						color: 'black',
 						fontSize: 20
 				}
+		});
+		chart1b.attributes({
+				title: "Remote °C",
+				color: ['red']
 		});
 		//chart.chartOptions passes args directly to Google Charts API (or C3/Charts.js)
 		chart1.chartOptions({
