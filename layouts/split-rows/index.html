@@ -69,7 +69,7 @@
           <div class="chart-title">
             Cell Title
           </div>
-          <div class="chart-stage" id="chart-02b">
+          <div class="chart-stage" id="goobernut">
               //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
@@ -181,7 +181,7 @@
 			var remoteCurrent = new Keen.Query("average", {
 				eventCollection: "Test 2",
 				targetProperty: "RemoteSensor1.temp",
-				timeframe: "this_1_minutes",
+				timeframe: "this_60_minutes",
 				timezone: "UTC"
 			});			
 			var boardCurrent = new Keen.Query("average", {
@@ -208,11 +208,11 @@
 			var chart1 = new Keen.Dataviz()
 				.el(document.getElementById("chart-02"))
 				.chartType("linechart");
-			var chart1b = new Keen.Dataviz()
-				.el(document.getElementById("chart-02b"))
-				.chartType("metric")
-				.title("Remote °C")
-				.colors("#49c5b1");
+			//var chart1b = new Keen.Dataviz()
+			//	.el(document.getElementById("chart-02b"))
+			//	.chartType("metric")
+				//.title("Remote °C")
+				//.colors("#49c5b1");
 			var chart2 = new Keen.Dataviz()
 				.el(document.getElementById("chart-03"))
 				.chartType("linechart");
@@ -265,9 +265,15 @@
 				}
 		});
 
+		client.draw(remoteCurrent, document.getElementById("goobernut"), {
+			chartType: "metric",
+			title: "Total Pageviews",
+			colors: ["#49c5b1"]
+		});
+		
+		
 		// start spinners
 		chart1.prepare();
-		chart1b.prepare();
 		chart2.prepare();
 
 		var req1 = client.run(remote, function(err, res){
@@ -278,18 +284,6 @@
 			else {
 				// Handle the response
 				chart1
-					.parseRequest(this)
-					.render();
-			}
-		});
-		var req1b = client.run(remoteCurrent, function(err, res){
-			if (err) {
-				// Display the API error
-				chart1b.error(err.message);
-			}
-			else {
-				// Handle the response
-				chart1b
 					.parseRequest(this)
 					.render();
 			}
@@ -310,7 +304,6 @@
 		// Re-run and refresh every half minute...
 		setInterval(function() {
 			req1.refresh();
-			req1b.refresh();
 			req2.refresh();
 		}, 1000 * 60 * 0.5);
 		
