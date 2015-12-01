@@ -16,7 +16,7 @@
           <div class="chart-title">
             Readings per Hour
           </div>
-          <div class="chart-stage" id="chart-00b">
+          <div class="chart-stage" id="chart-metric1">
               //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
@@ -29,7 +29,7 @@
           <div class="chart-title">
             (drag area to zoom-in, right-click to reset)
           </div>
-          <div class="chart-stage" id="chart-00">
+          <div class="chart-stage" id="chart-line1">
               //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
@@ -45,7 +45,7 @@
           <div class="chart-title">
             Current Temperature
           </div>
-          <div class="chart-stage" id="chart-02b">
+          <div class="chart-stage" id="chart-metric2">
               //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
@@ -58,7 +58,7 @@
           <div class="chart-title">
             (drag area to zoom-in, right-click to reset)
           </div>
-          <div class="chart-stage" id="chart-02">
+          <div class="chart-stage" id="chart-line2">
               //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
@@ -74,7 +74,7 @@
           <div class="chart-title">
             Current Temperature
           </div>
-          <div class="chart-stage" id="chart-03b">
+          <div class="chart-stage" id="chart-metric3">
               //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
@@ -87,7 +87,7 @@
           <div class="chart-title">
             (drag area to zoom-in, right-click to reset)
           </div>
-          <div class="chart-stage" id="chart-03">
+          <div class="chart-stage" id="chart-line3">
               //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
@@ -103,7 +103,7 @@
           <div class="chart-title">
             keen IO Stats
           </div>
-          <div class="chart-stage" id="chart-04b">
+          <div class="chart-stage" id="chart-metric4">
               //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
@@ -191,29 +191,29 @@
 				timezone: "UTC"
 			});
 			
-			var chart0b = new Keen.Dataviz()
-				.el(document.getElementById("chart-00b"))
+			var chartMetric1 = new Keen.Dataviz()
+				.el(document.getElementById("chart-metric1"))
 				.chartType("metric");								
-			var chart0 = new Keen.Dataviz()
-				.el(document.getElementById("chart-00"))
+			var chartLine1 = new Keen.Dataviz()
+				.el(document.getElementById("chart-line1"))
 				.chartType("linechart");
-			var chart1 = new Keen.Dataviz()
-				.el(document.getElementById("chart-02"))
+			var chartLine2 = new Keen.Dataviz()
+				.el(document.getElementById("chart-line2"))
 				.chartType("linechart");
-			var chart1b = new Keen.Dataviz()
-				.el(document.getElementById("chart-02b"))
+			var chartMetric2 = new Keen.Dataviz()
+				.el(document.getElementById("chart-metric2"))
 				.chartType("metric");
-			var chart2 = new Keen.Dataviz()
-				.el(document.getElementById("chart-03"))
+			var chartLine3 = new Keen.Dataviz()
+				.el(document.getElementById("chart-line3"))
 				.chartType("linechart");
-			var chart2b = new Keen.Dataviz()
-				.el(document.getElementById("chart-03b"))
+			var chartMetric3 = new Keen.Dataviz()
+				.el(document.getElementById("chart-metric3"))
 				.chartType("metric");								
-			var chart3b = new Keen.Dataviz()
-				.el(document.getElementById("chart-04b"))
+			var chartMetric4 = new Keen.Dataviz()
+				.el(document.getElementById("chart-metric4"))
 				.chartType("metric");								
 		//chart.attributes used for keen's chart settings (over-rides Google API)
-		chart0.attributes({
+		chartLine1.attributes({
 				title: "All Temperatures, °C (last hour)",
 				titlePosition: 'out',
 				titleTextStyle: {
@@ -221,7 +221,7 @@
 						fontSize: 20
 				}
 		});
-		chart1.attributes({
+		chartLine2.attributes({
 				title: "Remote Temperature, °C (last hour)",
 				//width: 900,
 				//height: 450,
@@ -231,7 +231,7 @@
 						fontSize: 20
 				}
 		});
-		chart2.attributes({
+		chartLine3.attributes({
 				title: "board Temperature, °C (last hour)",
 				//width: 900,
 				//height: 450,
@@ -241,25 +241,25 @@
 						fontSize: 20
 				}
 		});
-		chart0b.attributes({
+		chartMetric1.attributes({
 				title: "readings/hr",
 			colors: ['#A9A9A9']
 		});
-		chart1b.attributes({
+		chartMetric2.attributes({
 				title: "Remote °C",
 				colors: ['red']
 		});
-		chart2b.attributes({
+		chartMetric3.attributes({
 				title: "board °C",
 				colors: ['green']
 		});
-		chart3b.attributes({
+		chartMetric4.attributes({
 				title: "Events Total",
 				colors: ['#4B4B4B']
 		});
 		
 		//chart.chartOptions passes args directly to Google Charts API (or C3/Charts.js)
-		chart0.chartOptions({
+		chartLine1.chartOptions({
 				vAxis: {
 						minValue: 20,
 			maxValue: 45,
@@ -271,7 +271,7 @@
 						actions: ['dragToZoom', 'rightClickToReset'] 
 				}
 		});
-		chart1.chartOptions({
+		chartLine2.chartOptions({
 				vAxis: {
 						minValue: 20,
 			maxValue: 45,
@@ -283,7 +283,7 @@
 						actions: ['dragToZoom', 'rightClickToReset'] 
 				}
 		});
-		chart2.chartOptions({
+		chartLine3.chartOptions({
 				vAxis: {
 						minValue: 20,
 			maxValue: 45,
@@ -296,21 +296,21 @@
 				}
 		});
 		// start spinners
-		chart0b.prepare();
-		chart0.prepare();
-		chart1.prepare();
-		chart1b.prepare();
-		chart2.prepare();
-		chart2b.prepare();
-		chart3b.prepare();
+		chartMetric1.prepare();
+		chartLine1.prepare();
+		chartLine2.prepare();
+		chartMetric2.prepare();
+		chartLine3.prepare();
+		chartMetric3.prepare();
+		chartMetric4.prepare();
  		var req0b = client.run(readingsHr, function(err, res){
 			if (err) {
 				// Display the API error
-				chart0b.error(err.message);
+				chartMetric1.error(err.message);
 			}
 			else {
 				// Handle the response
-				chart0b
+				chartMetric1
 					.parseRequest(this)
 					.render();
 			}
@@ -318,11 +318,11 @@
 		var req1 = client.run(remote, function(err, res){
 			if (err) {
 				// Display the API error
-				chart1.error(err.message);
+				chartLine2.error(err.message);
 			}
 			else {
 				// Handle the response
-				chart1
+				chartLine2
 					.parseRequest(this)
 					.render();
 			}
@@ -330,11 +330,11 @@
 		var req1b = client.run(remoteCurrent, function(err, res){
 			if (err) {
 				// Display the API error
-				chart1b.error(err.message);
+				chartMetric2.error(err.message);
 			}
 			else {
 				// Handle the response
-				chart1b
+				chartMetric2
 					.parseRequest(this)
 					.render();
 			}
@@ -342,11 +342,11 @@
 		var req2 = client.run(board, function(err, res){
 			if (err) {
 				// Display the API error
-				chart2.error(err.message);
+				chartLine3.error(err.message);
 			}
 			else {
 				// Handle the response
-				chart2
+				chartLine3
 					.parseRequest(this)
 					.render();
 			}
@@ -354,11 +354,11 @@
 		var req2b = client.run(boardCurrent, function(err, res){
 			if (err) {
 				// Display the API error
-				chart2b.error(err.message);
+				chartMetric3.error(err.message);
 			}
 			else {
 				// Handle the response
-				chart2b
+				chartMetric3
 					.parseRequest(this)
 					.render();
 			}
@@ -366,11 +366,11 @@
 		var req3b = client.run(keenEvents, function(err, res){
 			if (err) {
 				// Display the API error
-				chart3b.error(err.message);
+				chartMetric4.error(err.message);
 			}
 			else {
 				// Handle the response
-				chart3b
+				chartMetric4
 					.parseRequest(this)
 					.render();
 			}
@@ -379,7 +379,7 @@
 		var req0 = client.run([remote, board], function(err, res){ // run the 2 queries
 			if (err) {
 				// Display the API error
-				chart0.error(err.message);
+				chartLine1.error(err.message);
 			}
 			else {
 				// Handle the response
@@ -398,7 +398,7 @@
 							]
 					}
 					if (i == result1.length-1) { // chart the data
-					chart0
+					chartLine1
 						.parseRawData({ result: data })
 						//.title("Remote & board Sensor Temps (30 second auto-updates)")
 						.render();
