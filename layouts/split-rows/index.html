@@ -151,8 +151,13 @@
 			
 		});
 		Keen.ready(function(){
-			var interval = "minutely"
-			var timeframe = "this_60_minutes"
+			var interval = "minutely";
+			var timeframe = "this_60_minutes";
+			metric2Title = "Remote °C";
+			metric3Title = "Board °C";
+			chart1Title = "All Temperatures, °C (last hour)";
+			chart2Title = "Remote Temperature, °C (last hour)";
+			chart3Title = "Board Temperature, °C (last hour)";
 		
 			var keenEvents = new Keen.Query("count", {
 				eventCollection: "MM_temps",
@@ -214,7 +219,7 @@
 				.chartType("metric");								
 		//chart.attributes used for keen's chart settings (over-rides Google API)
 		chartLine1.attributes({
-				title: "All Temperatures, °C (last hour)",
+				title: chart1Title,
 				titlePosition: 'out',
 				titleTextStyle: {
 						color: 'black',
@@ -222,7 +227,7 @@
 				}
 		});
 		chartLine2.attributes({
-				title: "Remote Temperature, °C (last hour)",
+				title: chart2Title,
 				//width: 900,
 				//height: 450,
 				titlePosition: 'out',
@@ -232,7 +237,7 @@
 				}
 		});
 		chartLine3.attributes({
-				title: "board Temperature, °C (last hour)",
+				title: chart3Title,
 				//width: 900,
 				//height: 450,
 				titlePosition: 'out',
@@ -246,11 +251,11 @@
 			colors: ['#A9A9A9']
 		});
 		chartMetric2.attributes({
-				title: "Remote °C",
+				title: metric2Title,
 				colors: ['red']
 		});
 		chartMetric3.attributes({
-				title: "board °C",
+				title: metric3Title,
 				colors: ['green']
 		});
 		chartMetric4.attributes({
