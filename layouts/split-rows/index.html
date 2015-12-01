@@ -146,8 +146,8 @@
 
 	<script type="text/javascript">
 		var client = new Keen({
-			projectId: "53e30cc333e4061149000003",
-			readKey: "d1eb6835488aa74b884d772a26c1c782ebbea9c1a4b53e1c2b944166a642d81f5d4d8191babb55bcf54a343d018ad33cb2d85bf6e2eeb9971fb707756eaa19eb32f0ef90d04258b649d9bf43cdd75916af43742d5ea17b78c30b468c2315dcf717231814a053f7a2daecdb547e003e3b"
+			projectId: "5645a4f790e4bd5b6a0739c2",
+			readKey: "fa42307083bff8e6b5e8334e71e9d0bb151c09e383841db6814fc049dad78419074ad655dcc9174137d40243d3a113b5336b4a2fd534a6d5c89b616d61f1330da30c9a950be9fa4c7bdeddcdfd61d1283a4f5235abc86df8c966389bcd97910d5b16a1293032850c876db1c54ee3c3d6"
 			
 		});
 		Keen.ready(function(){
@@ -155,38 +155,38 @@
 			var timeframe = "this_60_minutes"
 		
 			var keenEvents = new Keen.Query("count", {
-				eventCollection: "Test 2",
+				eventCollection: "MM_temps",
 				timeframe: "this_1_months",
 				timezone: "UTC"
 			});			
 			var readingsHr = new Keen.Query("count", {
-				eventCollection: "Test 2",
+				eventCollection: "MM_temps",
 				timeframe: "this_60_minutes",
 				timezone: "UTC"
 			});			
 			var remoteCurrent = new Keen.Query("average", {
-				eventCollection: "Test 2",
-				targetProperty: "RemoteSensor1.temp",
+				eventCollection: "MM_temps",
+				targetProperty: "Office.temp",
 				timeframe: "this_2_minutes", // NOTE:  using only 1 minute often returns no result (not sure why)
 				timezone: "UTC"
 			});			
 			var boardCurrent = new Keen.Query("average", {
-				eventCollection: "Test 2",
-				targetProperty: "BoardSensor1.temp",
+				eventCollection: "MM_temps",
+				targetProperty: "board.temp",
 				timeframe: "this_2_minutes",
 				timezone: "UTC"
 			});			
 			var remote = new Keen.Query("average", {
-				eventCollection: "Test 2",
+				eventCollection: "MM_temps",
 				interval: interval,
-				targetProperty: "RemoteSensor1.temp",
+				targetProperty: "Office.temp",
 				timeframe: timeframe,
 				timezone: "UTC"
 			});
 			var board = new Keen.Query("average", {
-				eventCollection: "Test 2",
+				eventCollection: "MM_temps",
 				interval: interval,
-				targetProperty: "BoardSensor1.temp",
+				targetProperty: "board.temp",
 				timeframe: timeframe,
 				timezone: "UTC"
 			});
@@ -232,7 +232,7 @@
 				}
 		});
 		chart2.attributes({
-				title: "Board Temperature, °C (last hour)",
+				title: "board Temperature, °C (last hour)",
 				//width: 900,
 				//height: 450,
 				titlePosition: 'out',
@@ -250,7 +250,7 @@
 				colors: ['red']
 		});
 		chart2b.attributes({
-				title: "Board °C",
+				title: "board °C",
 				colors: ['green']
 		});
 		chart3b.attributes({
@@ -394,13 +394,13 @@
 							timeframe: result1[i]["timeframe"],
 							value: [
 									{ category: "Remote °C", result: result1[i]["value"] },
-									{ category: "Board °C", result: result2[i]["value"] }
+									{ category: "board °C", result: result2[i]["value"] }
 							]
 					}
 					if (i == result1.length-1) { // chart the data
 					chart0
 						.parseRawData({ result: data })
-						//.title("Remote & Board Sensor Temps (30 second auto-updates)")
+						//.title("Remote & board Sensor Temps (30 second auto-updates)")
 						.render();
 					}
 					i++;
