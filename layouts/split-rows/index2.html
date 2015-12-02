@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!-- Test combining pubnub and keen APIs in simple bootstrap page -->
+<html lang="en-us">
+
+<head>
+	<title>Test Messages</title>
+	<meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>	
+</head>
+
+<body>
+	<button type="button" class="btn btn-primary">Publish</button>
+	<button type="button" class="btn btn-default">Get Sensors</button>
+	<br><br><p id="sendStatus">Status: connecting...</p>
+	<p id="recStatus">Status: connecting...</p>
+	<p id="sensorList">Available Sensors:</p>
+	<div id="reading-block">
+		<h2>Readings °C:</h2>
+		<p id="reading"></p>
+	</div>
+	<script src="https://cdn.pubnub.com/pubnub-3.7.18.min.js"></script>
+	<script src="https://d26b395fwzu5fz.cloudfront.net/3.3.0/keen.min.js" type="text/javascript"></script>
+	<script src="app.js"></script>
+</body>
+</html>
