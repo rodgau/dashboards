@@ -19,17 +19,12 @@ var main = function() {
 
     // Subscribe to a channel
     pubnub.subscribe({
-        channel: 'my_channel',
+        channel: 'MM_temps',
         message: function(m) {
             var s="";
             var x;
             msgCount++;
-            for (x in m) {
-                //text += person[x];
-                s += x +": "+ m[x]+", ";
-            }
-            //$('#reading').text(m.sensor_1 +", "+m.sensor_2+"°C")
-            $('#reading').text(s);
+            displayTemps(m);
             $('#recStatus').text("Status: data received ("+msgCount+" total)");
         },
         error: function (error) {
@@ -37,7 +32,7 @@ var main = function() {
           console.log(JSON.stringify(error));
         },
         connect: function() {
-            $('.btn-primary').show();
+            // (now receiving from Imp) $('.btn-primary').show();
             $('#recStatus').text("Status: waiting");
             $('#sendStatus').text("Status: ready");
         }
@@ -352,6 +347,13 @@ var main = function() {
   		}, 1000 * 60 * 0.5);
 
     }); //--- end keen.ready()
+
+    function displayTemps(data) {
+        var total = "";
+        for ( var index in data )
+            total += ( index + ": " + data[index].temp + ", " );
+        $('#reading').text(total);
+    }
 
     function displayResult(data) {
         var total = [];
