@@ -44,14 +44,15 @@ var main = function() {
      });
 
     $('.btn-default').click(function() {
-        client.run(querySensors, function(err, res){
-            if (err) {
-              // there was an error!
-            }
-            else {
-              displayResult(res.result);
-            }
-        });
+      $('#sensorList').text("Available Sensors: getting list...");
+      client.run(querySensors, function(err, res){
+          if (err) {
+            // there was an error!
+          }
+          else {
+            displayResult(res.result);
+          }
+      });
     });
     $('.btn-primary').click(function() {
         $('#sendStatus').text("Status: sending data...");
