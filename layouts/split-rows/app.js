@@ -1,3 +1,18 @@
+// My functional Dashboard app for Matchmallow project.
+// Keen IO charts combined with Live PubNub data from real-time Imp readings.
+// Working with Imp firmware build v703.
+// App hosted on my gh-pages GitHub site: http://rodgau.github.io/dashboards/layouts/split-rows/index.html
+// App Files:
+//  index.html, app.js
+//  Plus other supporting files per Keen free sample dashboards.
+//  There's no harm in including all of them as provided in my github project here,
+//  but the particular "split-rows" example I'm hacking here only actually requires These
+//  (relative to this index.html):
+//      "../../assets/css/keen-dashboards.css" and "keen-static.css"
+//      "../../assets/js/meta.js"
+//       "../../assets/lib/holderjs/holder.js"
+//
+// Dec. 1, 2015
 
 var main = function() {
     $('.btn-primary').hide();
