@@ -2,7 +2,14 @@
 <html>
 <head>
   <title>Dashboard &raquo; Main Sensors</title>
-  <link rel="stylesheet" type="text/css" href="../../assets/lib/bootstrap/dist/css/bootstrap.min.css" />
+  <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="../../assets/css/keen-dashboards.css" />
 </head>
 <body class="application">
@@ -116,8 +123,17 @@
           <div class="chart-title">
             Cell Title
           </div>
-          <div class="chart-stage">
-              <img data-src="holder.js/100%x120/white">
+          <div class="chart-stage" id="control-panel">
+            <button type="button" class="btn btn-primary">Publish</button>
+          	<button type="button" class="btn btn-default">Get Sensors</button>
+          	<br><br><p id="sendStatus">Status: connecting...</p>
+          	<p id="recStatus">Status: connecting...</p>
+          	<p id="sensorList">Available Sensors:</p>
+          	<div id="reading-block">
+          		<h2>Readings °C:</h2>
+          		<p id="reading"></p>
+          	</div>
+              //<img data-src="holder.js/100%x120/white">
           </div>
           <div class="chart-notes">
             Notes about this chart
@@ -133,298 +149,24 @@
 
   </div>
 
-  <script type="text/javascript" src="../../assets/lib/jquery/dist/jquery.min.js"></script>
-  <script type="text/javascript" src="../../assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-
   <script type="text/javascript" src="../../assets/lib/holderjs/holder.js"></script>
   <script>
     Holder.add_theme("white", { background:"#fff", foreground:"#a7a7a7", size:10 });
   </script>
 
-  <script type="text/javascript" src="../../assets/lib/keen-js/dist/keen.min.js"></script>
-  <script type="text/javascript" src="../../assets/js/meta.js"></script>
+  <script src="https://cdn.pubnub.com/pubnub-3.7.18.min.js"></script>
+	<script src="https://d26b395fwzu5fz.cloudfront.net/3.3.0/keen.min.js"></script>
+  <script src="../../assets/js/meta.js"></script>
+  <script src="app.js"></script>
 
-	<script type="text/javascript">
+	<!-- <script>
 		var client = new Keen({
 			projectId: "5645a4f790e4bd5b6a0739c2",
 			readKey: "fa42307083bff8e6b5e8334e71e9d0bb151c09e383841db6814fc049dad78419074ad655dcc9174137d40243d3a113b5336b4a2fd534a6d5c89b616d61f1330da30c9a950be9fa4c7bdeddcdfd61d1283a4f5235abc86df8c966389bcd97910d5b16a1293032850c876db1c54ee3c3d6"
-			
+
 		});
 		Keen.ready(function(){
-			var interval = "minutely";
-			var timeframe = "this_60_minutes";
-			metric2Title = "Remote °C";
-			metric3Title = "Board °C";
-			chart1Title = "All Temperatures, °C (last hour)";
-			chart2Title = "Remote Temperature, °C (last hour)";
-			chart3Title = "Board Temperature, °C (last hour)";
-		
-			var keenEvents = new Keen.Query("count", {
-				eventCollection: "MM_temps",
-				timeframe: "this_1_months",
-				timezone: "UTC"
-			});			
-			var readingsHr = new Keen.Query("count", {
-				eventCollection: "MM_temps",
-				timeframe: "this_60_minutes",
-				timezone: "UTC"
-			});			
-			var remoteCurrent = new Keen.Query("average", {
-				eventCollection: "MM_temps",
-				targetProperty: "Office.temp",
-				timeframe: "this_2_minutes", // NOTE:  using only 1 minute often returns no result (not sure why)
-				timezone: "UTC"
-			});			
-			var boardCurrent = new Keen.Query("average", {
-				eventCollection: "MM_temps",
-				targetProperty: "board.temp",
-				timeframe: "this_2_minutes",
-				timezone: "UTC"
-			});			
-			var remote = new Keen.Query("average", {
-				eventCollection: "MM_temps",
-				interval: interval,
-				targetProperty: "Office.temp",
-				timeframe: timeframe,
-				timezone: "UTC"
-			});
-			var board = new Keen.Query("average", {
-				eventCollection: "MM_temps",
-				interval: interval,
-				targetProperty: "board.temp",
-				timeframe: timeframe,
-				timezone: "UTC"
-			});
-			
-			var chartMetric1 = new Keen.Dataviz()
-				.el(document.getElementById("chart-metric1"))
-				.chartType("metric");								
-			var chartLine1 = new Keen.Dataviz()
-				.el(document.getElementById("chart-line1"))
-				.chartType("linechart");
-			var chartLine2 = new Keen.Dataviz()
-				.el(document.getElementById("chart-line2"))
-				.chartType("linechart");
-			var chartMetric2 = new Keen.Dataviz()
-				.el(document.getElementById("chart-metric2"))
-				.chartType("metric");
-			var chartLine3 = new Keen.Dataviz()
-				.el(document.getElementById("chart-line3"))
-				.chartType("linechart");
-			var chartMetric3 = new Keen.Dataviz()
-				.el(document.getElementById("chart-metric3"))
-				.chartType("metric");								
-			var chartMetric4 = new Keen.Dataviz()
-				.el(document.getElementById("chart-metric4"))
-				.chartType("metric");								
-		//chart.attributes used for keen's chart settings (over-rides Google API)
-		chartLine1.attributes({
-				title: chart1Title,
-				titlePosition: 'out',
-				titleTextStyle: {
-						color: 'black',
-						fontSize: 20
-				}
-		});
-		chartLine2.attributes({
-				title: chart2Title,
-				//width: 900,
-				//height: 450,
-				titlePosition: 'out',
-				titleTextStyle: {
-						color: 'black',
-						fontSize: 20
-				}
-		});
-		chartLine3.attributes({
-				title: chart3Title,
-				//width: 900,
-				//height: 450,
-				titlePosition: 'out',
-				titleTextStyle: {
-						color: 'black',
-						fontSize: 20
-				}
-		});
-		chartMetric1.attributes({
-				title: "readings/hr",
-			colors: ['#A9A9A9']
-		});
-		chartMetric2.attributes({
-				title: metric2Title,
-				colors: ['red']
-		});
-		chartMetric3.attributes({
-				title: metric3Title,
-				colors: ['green']
-		});
-		chartMetric4.attributes({
-				title: "Events Total",
-				colors: ['#4B4B4B']
-		});
-		
-		//chart.chartOptions passes args directly to Google Charts API (or C3/Charts.js)
-		chartLine1.chartOptions({
-				vAxis: {
-						minValue: 20,
-			maxValue: 45,
-						minorGridlines: {
-								count: 5
-						}
-				},
-				explorer: {
-						actions: ['dragToZoom', 'rightClickToReset'] 
-				}
-		});
-		chartLine2.chartOptions({
-				vAxis: {
-						minValue: 20,
-			maxValue: 45,
-						minorGridlines: {
-								count: 5
-						}
-				},
-				explorer: {
-						actions: ['dragToZoom', 'rightClickToReset'] 
-				}
-		});
-		chartLine3.chartOptions({
-				vAxis: {
-						minValue: 20,
-			maxValue: 45,
-						minorGridlines: {
-								count: 5
-						}
-				},
-				explorer: {
-						actions: ['dragToZoom', 'rightClickToReset'] 
-				}
-		});
-		// start spinners
-		chartMetric1.prepare();
-		chartLine1.prepare();
-		chartLine2.prepare();
-		chartMetric2.prepare();
-		chartLine3.prepare();
-		chartMetric3.prepare();
-		chartMetric4.prepare();
- 		var req0b = client.run(readingsHr, function(err, res){
-			if (err) {
-				// Display the API error
-				chartMetric1.error(err.message);
-			}
-			else {
-				// Handle the response
-				chartMetric1
-					.parseRequest(this)
-					.render();
-			}
-		});
-		var req1 = client.run(remote, function(err, res){
-			if (err) {
-				// Display the API error
-				chartLine2.error(err.message);
-			}
-			else {
-				// Handle the response
-				chartLine2
-					.parseRequest(this)
-					.render();
-			}
-		});
-		var req1b = client.run(remoteCurrent, function(err, res){
-			if (err) {
-				// Display the API error
-				chartMetric2.error(err.message);
-			}
-			else {
-				// Handle the response
-				chartMetric2
-					.parseRequest(this)
-					.render();
-			}
-		});
-		var req2 = client.run(board, function(err, res){
-			if (err) {
-				// Display the API error
-				chartLine3.error(err.message);
-			}
-			else {
-				// Handle the response
-				chartLine3
-					.parseRequest(this)
-					.render();
-			}
-		});
-		var req2b = client.run(boardCurrent, function(err, res){
-			if (err) {
-				// Display the API error
-				chartMetric3.error(err.message);
-			}
-			else {
-				// Handle the response
-				chartMetric3
-					.parseRequest(this)
-					.render();
-			}
-		});
-		var req3b = client.run(keenEvents, function(err, res){
-			if (err) {
-				// Display the API error
-				chartMetric4.error(err.message);
-			}
-			else {
-				// Handle the response
-				chartMetric4
-					.parseRequest(this)
-					.render();
-			}
-		});
-		// handle our combined line graph a bit differently
-		var req0 = client.run([remote, board], function(err, res){ // run the 2 queries
-			if (err) {
-				// Display the API error
-				chartLine1.error(err.message);
-			}
-			else {
-				// Handle the response
-				var result1 = res[0].result // data from first query
-				var result2 = res[1].result // data from second query
-				var data =[] // place for combined results
-				var i = 0
-				
-				while (i < result1.length) {
-	
-					data[i]={ // format the data so it can be charted
-							timeframe: result1[i]["timeframe"],
-							value: [
-									{ category: "Remote °C", result: result1[i]["value"] },
-									{ category: "board °C", result: result2[i]["value"] }
-							]
-					}
-					if (i == result1.length-1) { // chart the data
-					chartLine1
-						.parseRawData({ result: data })
-						//.title("Remote & board Sensor Temps (30 second auto-updates)")
-						.render();
-					}
-					i++;
-				}
-			}
-		});
-		// Re-run and refresh every half minute...
-		setInterval(function() {			
-			req0b.refresh();
-			req0.refresh();
-			req1.refresh();
-			req1b.refresh();
-			req2.refresh();
-			req2b.refresh();
-			req3b.refresh();
-		}, 1000 * 60 * 0.5);
-		
-	});
-	</script>
-	
+	</script> -->
+
 </body>
 </html>
